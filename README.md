@@ -4,5 +4,3 @@ Jak będziecie robić backend, to otwierajcie folder backend jako projekt Intell
 Nie otwierajcie głównego folderu jako projekt, bo wam nie wykryje i tylko się wkurwicie.
 
 Jeśli chodzi o frontend, to nie wiem jak ma to wyglądać, ale jeśli też będzie jakiś Maven, to róbcie jak wyżej.
-
-Added this line as a test, and now I am testing even more.
