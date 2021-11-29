@@ -5,4 +5,4 @@ Nie otwierajcie głównego folderu jako projekt, bo wam nie wykryje i tylko się
 
 Jeśli chodzi o frontend, to nie wiem jak ma to wyglądać, ale jeśli też będzie jakiś Maven, to róbcie jak wyżej.
 
-# Added this line as a test.
+Added this line as a test, and now I am testing even more.
