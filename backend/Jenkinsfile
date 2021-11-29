@@ -1,0 +1,23 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                git 'https://gitlab-stud.elka.pw.edu.pl/ewrzosek/pis-projekt.git'
+                sh './mvnw clean spring-boot:run'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh '.mvnw test'
+            }
+            post {
+                always {
+                    junit '**/target/surefire-reports/TEST-*.xml'
+                }
+            }
+        }
+    }
+
+}
