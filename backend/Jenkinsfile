@@ -4,20 +4,26 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                git 'https://gitlab-stud.elka.pw.edu.pl/ewrzosek/pis-projekt.git'
-                sh './mvnw clean spring-boot:run'
+                sh 'rm -rf build'
+                sh 'mkdir build'
+                sh 'touch build/car.txt'
+                sh 'echo "chassis" >> build/car.txt'
+                sh 'echo "engine" >> build/car.txt'
+                sh 'echo "body" >> build/car.txt'
             }
         }
         stage('Test') {
             steps {
-                sh '.mvnw test'
+                sh 'test -f build/car.txt'
+                sh 'grep "chassis" build/car.txt'
+                sh 'grep "engine" build/car.txt'
+                sh 'grep "body" build/car.txt'
             }
-            post {
-                always {
-                    junit '**/target/surefire-reports/TEST-*.xml'
-                }
+        }
+        stage('Publish') {
+            steps {
+                archiveArtifacts artifacts: 'build/'
             }
         }
     }
-
 }
