@@ -21,4 +21,5 @@ build-job:       # This job runs in the build stage, which runs first.
   tags:
     - ci
   script:
+    - echo "just print something, jeez..."
     - mvn compile
