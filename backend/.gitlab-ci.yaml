@@ -1,4 +1,4 @@
 build:
   stage: build
-  script:P
+  script:
     - mvn compile
