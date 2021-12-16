@@ -2,19 +2,15 @@ package com.example.pis.controller
 
 import it.skrape.core.document
 import it.skrape.core.htmlDocument
-import it.skrape.fetcher.skrape
-import it.skrape.fetcher.response
-import it.skrape.selects.eachHref
-import it.skrape.selects.eachText
 import it.skrape.fetcher.HttpFetcher
 import it.skrape.fetcher.extractIt
-import it.skrape.fetcher.request.Json
-import it.skrape.matchers.toBe
-import it.skrape.matchers.toBePresentExactlyTwice
-import it.skrape.selects.and
-import it.skrape.selects.html5.*
-import org.springframework.web.bind.annotation.*
-import javax.management.Query.div
+import it.skrape.fetcher.response
+import it.skrape.fetcher.skrape
+import it.skrape.selects.html5.h1
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RestController
 
 
 @RestController
@@ -35,10 +31,10 @@ class ScrappingController {
         val allText: String
     )
 
-    @GetMapping("/all")
-    fun extractAllText(@RequestParam(name = "url") _url: String) = skrape(HttpFetcher) {
+    @GetMapping("/all/text")
+    fun extractAllText() = skrape(HttpFetcher) {
         request {
-            url = _url
+            url = "https://pl.wikipedia.org/wiki/Jan_Pawe%C5%82_II"
         }
         response {
             AllDataClass(
@@ -48,6 +44,20 @@ class ScrappingController {
             )
         }
     }
+
+//    @GetMapping("/all/text")
+//    fun extractAllText(@RequestParam(name = "url") _url: String) = skrape(HttpFetcher) {
+//        request {
+//            url = _url
+//        }
+//        response {
+//            AllDataClass(
+//                httpStatusCode = status { code },
+//                httpStatusMessage = status { message },
+//                allText = document.text
+//            )
+//        }
+//    }
 
     data class H1ByIdDataClass(
         var httpStatusCode: Int = 0,
