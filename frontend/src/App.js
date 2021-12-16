@@ -4,28 +4,25 @@ import './App.css';
 
 class App extends Component {
   state = {
-    clients: []
+    msg: ""
   };
 
   async componentDidMount() {
     const response = await fetch('/api/hello');
-    const body = await response.json();
-    this.setState({clients: body});
+    const body = await response.text();
+    this.setState({msg: body});
   }
 
   render() {
-    const {clients} = this.state;
+    const {msg} = this.state;
     return (
         <div className="App">
           <header className="App-header">
             <img src={logo} className="App-logo" alt="logo" />
             <div className="App-intro">
-              <h2>Clients</h2>
-              {clients.map(client =>
-                  <div key={client.id}>
-                    {client.name} ({client.email})
-                  </div>
-              )}
+              <div key={msg}>
+                {msg}
+              </div>
             </div>
           </header>
         </div>
