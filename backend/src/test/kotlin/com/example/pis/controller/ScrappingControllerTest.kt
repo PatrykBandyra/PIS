@@ -1,25 +1,14 @@
 package com.example.pis.controller
 
-import com.fasterxml.jackson.module.kotlin.jsonMapper
-import org.json.JSONObject
+import io.ktor.client.request.*
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
-import org.junit.jupiter.params.ParameterizedTest
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
 import org.springframework.http.MediaType
-import org.springframework.http.ResponseEntity.status
-import org.springframework.test.context.junit.jupiter.SpringExtension
-import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.MvcResult
-import org.springframework.test.web.servlet.RequestBuilder
-import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
-import java.nio.charset.StandardCharsets
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 
 
 //@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -42,12 +31,32 @@ import java.nio.charset.StandardCharsets
 //    }
 //}
 
-@ExtendWith(SpringExtension::class)
-@WebMvcTest(ScrappingController::class)
-class ScrappingControllerTest {
+//@ExtendWith(SpringExtension::class)
+//@WebMvcTest(ScrappingController::class)
+//class ScrappingControllerTest {
+//
+//    @Autowired
+//    lateinit var mockMvc: MockMvc
+//
+//    @Test
+//    fun `should return content of h1 with given id`() {
+//        // given
+//        val url = "https://en.wikipedia.org/wiki/Pope_John_Paul_II"
+//        val id = "firstHeading"
+//
+//        val request: RequestBuilder = MockMvcRequestBuilders.get("/scrape/h1/id/?url=$url&id=$id")
+//        val result: MvcResult = mockMvc.perform(request).andReturn()
+//
+//        Assertions.assertEquals(
+//            "{\"httpStatusCode\":200,\"httpStatusMessage\":\"OK\",\"h1Content\":\"Pope John Paul II\"}",
+//            result.response.contentAsString
+//        )
+//
+//    }
+//}
 
-    @Autowired
-    lateinit var mockMvc: MockMvc
+@WebMvcTest
+class ScrappingControllerTest(@Autowired val mockMvc: MockMvc) {
 
     @Test
     fun `should return content of h1 with given id`() {
@@ -55,14 +64,13 @@ class ScrappingControllerTest {
         val url = "https://en.wikipedia.org/wiki/Pope_John_Paul_II"
         val id = "firstHeading"
 
-        val request: RequestBuilder = MockMvcRequestBuilders.get("/scrape/h1/id/?url=$url&id=$id")
-        val result: MvcResult = mockMvc.perform(request).andReturn()
+        val expected = "Pope John Paul II"
 
-        Assertions.assertEquals(
-            "{\"httpStatusCode\":200,\"httpStatusMessage\":\"OK\",\"h1Content\":\"Pope John Paul II\"}",
-            result.response.contentAsString
-        )
-
+        mockMvc.perform(MockMvcRequestBuilders.get("/scrape/h1/id/?url=$url&id=$id")
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk)
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("h1Content").value(expected))
     }
 }
 
