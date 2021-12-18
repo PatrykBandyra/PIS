@@ -1,11 +1,15 @@
-import React, {Component} from 'react';
-import {Navbar, NavbarBrand} from 'reactstrap';
-import {Link} from 'react-router-dom';
+import React, { Component } from 'react';
+import { Navbar, NavbarBrand } from 'reactstrap';
+import { Link } from 'react-router-dom';
 
-export default class AppNavbar extends Component {
+type State = {
+    isOpen: boolean;
+}
+
+export default class AppNavbar extends Component<{}, State> {
     constructor(props) {
         super(props);
-        this.state = {isOpen: false};
+        this.state = { isOpen: false };
         this.toggle = this.toggle.bind(this);
     }
 

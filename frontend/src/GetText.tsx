@@ -1,11 +1,20 @@
 import React, { Component } from 'react';
 import { Button, Container, Form, FormGroup, Label, Input } from 'reactstrap';
 import AppNavbar from './AppNavbar';
-import { Link } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router-dom';
 
-class GetText extends Component {
+interface Props extends RouteComponentProps<any> {
 
-    constructor(props) {
+}
+
+type State = {
+    url: string;
+    allText: string;
+}
+
+class GetText extends Component<Props, State> {
+
+    constructor(props: Props) {
         super(props);
         this.state = {
             url: "",
@@ -15,9 +24,9 @@ class GetText extends Component {
         this.handleChange = this.handleChange.bind(this);
     }
 
-    async handleSubmit(event) {
+    async handleSubmit(event: React.SyntheticEvent) {
         event.preventDefault();
-        await fetch('/scrape/all?url=' + this.state.url, {
+        await fetch('/scrape/all/text?url=' + this.state.url, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -29,13 +38,11 @@ class GetText extends Component {
         this.props.history.push('/scrapeit/text');
     }
 
-    handleChange(event) {
+    handleChange(event: React.ChangeEvent<HTMLInputElement>) {
         const target = event.target;
         const value = target.value;
         const name = target.name;
-        let item = {};
-        item[name] = value;
-        this.setState(item);
+        this.setState({...this.state, [name]: value});
     }
 
     render() {

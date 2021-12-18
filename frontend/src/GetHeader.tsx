@@ -1,22 +1,32 @@
 import React, { Component } from 'react';
 import { Button, Container, Form, FormGroup, Label, Input } from 'reactstrap';
 import AppNavbar from './AppNavbar';
-import { Link } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router-dom';
 
-class GetText extends Component {
+interface Props extends RouteComponentProps<any> {
 
-    constructor(props) {
+}
+
+type State = {
+    url: string;
+    id: string;
+    allText: string;
+}
+
+class GetText extends Component<Props, State> {
+
+    constructor(props: Props) {
         super(props);
         this.state = {
             url: "",
             id: "",
-            result: {}
+            allText: ""
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
     }
 
-    async handleSubmit(event) {
+    async handleSubmit(event: React.SyntheticEvent) {
         event.preventDefault();
         await fetch('/scrape/h1/id?url=' + this.state.url + '&id=' + this.state.id, {
             method: 'GET',
@@ -30,13 +40,11 @@ class GetText extends Component {
         this.props.history.push('/scrapeit/header');
     }
 
-    handleChange(event) {
+    handleChange(event: React.ChangeEvent<HTMLInputElement>) {
         const target = event.target;
         const value = target.value;
         const name = target.name;
-        let item = {};
-        item[name] = value;
-        this.setState(item);
+        this.setState({...this.state, [name]: value});
     }
 
     render() {
