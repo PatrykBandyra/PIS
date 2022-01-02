@@ -31,29 +31,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 //    }
 //}
 
-//@ExtendWith(SpringExtension::class)
-//@WebMvcTest(ScrappingController::class)
-//class ScrappingControllerTest {
-//
-//    @Autowired
-//    lateinit var mockMvc: MockMvc
-//
-//    @Test
-//    fun `should return content of h1 with given id`() {
-//        // given
-//        val url = "https://en.wikipedia.org/wiki/Pope_John_Paul_II"
-//        val id = "firstHeading"
-//
-//        val request: RequestBuilder = MockMvcRequestBuilders.get("/scrape/h1/id/?url=$url&id=$id")
-//        val result: MvcResult = mockMvc.perform(request).andReturn()
-//
-//        Assertions.assertEquals(
-//            "{\"httpStatusCode\":200,\"httpStatusMessage\":\"OK\",\"h1Content\":\"Pope John Paul II\"}",
-//            result.response.contentAsString
-//        )
-//
-//    }
-//}
 
 @WebMvcTest
 class ScrappingControllerTest(@Autowired val mockMvc: MockMvc) {
