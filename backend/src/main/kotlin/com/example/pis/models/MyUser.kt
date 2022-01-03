@@ -5,6 +5,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import javax.persistence.*
 
 @Entity
+@Table(name = "MY_USER")
 class MyUser {
 
     @Id
@@ -25,6 +26,9 @@ class MyUser {
             val passwordEncoder = BCryptPasswordEncoder()
             field = passwordEncoder.encode(value)
         }
+
+    @OneToMany(mappedBy = "user", cascade = [(CascadeType.ALL)], fetch = FetchType.LAZY)
+    var tasks: MutableList<MyTask> = mutableListOf()
 
     fun comparePassword(password: String): Boolean = BCryptPasswordEncoder().matches(password, this.password)
 }
