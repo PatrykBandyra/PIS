@@ -32,3 +32,4 @@ build/
 ### VS Code ###
 .vscode/
 /src/main/kotlin/tutorial/
+/src/main/kotlin/presentation/

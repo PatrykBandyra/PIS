@@ -1,86 +1,70 @@
 package com.example.pis.controller
 
-import it.skrape.core.document
-import it.skrape.core.htmlDocument
-import it.skrape.fetcher.HttpFetcher
-import it.skrape.fetcher.extractIt
-import it.skrape.fetcher.response
-import it.skrape.fetcher.skrape
-import it.skrape.selects.html5.h1
+import com.example.pis.dtos.ScrapedContent
+import org.jsoup.Jsoup
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-
+import java.io.IOException
 
 @RestController
 @RequestMapping("scrape")
 class ScrappingController {
 
-//    data class AllDataClass(
-//        val httpStatusCode: Int,
-//        val httpStatusMessage: String,
-//        val paragraph: String,
-//        val allParagraphs: List<String>,
-//        val allLinks: List<String>
-//    )
+    @GetMapping("text")
+    fun extractText(@RequestParam(name = "url") url: String,
+                    @RequestParam(name = "query") query: String): ScrapedContent? {
+        try {
+            val response = Jsoup.connect(url).followRedirects(false).execute()
 
-    data class AllDataClass(
-        val httpStatusCode: Int,
-        val httpStatusMessage: String,
-        val allText: String
-    )
+                if (response.statusCode() == 200) {
+                    val doc = Jsoup.connect(url).get()
+                    return ScrapedContent(
+                        response.statusCode(),
+                        response.statusMessage(),
+                        doc.select(query).text()
+                    )
+                }
 
-    @GetMapping("/all/text")
-    fun extractAllText() = skrape(HttpFetcher) {
-        request {
-            url = "https://pl.wikipedia.org/wiki/Jan_Pawe%C5%82_II"
+                return ScrapedContent(
+                    response.statusCode(),
+                    response.statusMessage(),
+                    null
+                )
+
+        } catch (e: IOException) {
+            e.printStackTrace()
+            return null
         }
-        response {
-            AllDataClass(
-                httpStatusCode = status { code },
-                httpStatusMessage = status { message },
-                allText = document.text
-            )
-        }
+
     }
 
-//    @GetMapping("/all/text")
-//    fun extractAllText(@RequestParam(name = "url") _url: String) = skrape(HttpFetcher) {
-//        request {
-//            url = _url
-//        }
-//        response {
-//            AllDataClass(
-//                httpStatusCode = status { code },
-//                httpStatusMessage = status { message },
-//                allText = document.text
-//            )
-//        }
-//    }
+    @GetMapping("html")
+    fun extractHtml(@RequestParam(name = "url") url: String,
+                    @RequestParam(name = "query") query: String): ScrapedContent? {
+        try {
+            val response = Jsoup.connect(url).followRedirects(false).execute()
 
-    data class H1ByIdDataClass(
-        var httpStatusCode: Int = 0,
-        var httpStatusMessage: String = "",
-        var h1Content: String = ""
-
-    )
-
-    @GetMapping("/h1/id")
-    fun extractH1ById(@RequestParam(name = "url") _url: String, @RequestParam(name = "id") _id: String) =
-        skrape(HttpFetcher) {
-            request {
-                url = _url
+            if (response.statusCode() == 200) {
+                val doc = Jsoup.connect(url).get()
+                return ScrapedContent(
+                    response.statusCode(),
+                    response.statusMessage(),
+                    doc.select(query).html()
+                )
             }
-            extractIt<H1ByIdDataClass> {
-                it.httpStatusCode = status { code }
-                it.httpStatusMessage = status { message }
-                htmlDocument {
-                    h1 {
-                        withId = _id
-                        it.h1Content = findFirst { text }
-                    }
-                }
-            }
+
+            return ScrapedContent(
+                response.statusCode(),
+                response.statusMessage(),
+                null
+            )
+
+        } catch (e: IOException) {
+            e.printStackTrace()
+            return null
         }
+
+    }
 }
