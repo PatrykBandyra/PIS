@@ -14,13 +14,13 @@ class MyHistory {
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Int = 0
 
-    @Column
+    @Column(length = 4000)
     var content = ""
 
     @Column(
         updatable = false,
         columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP",
-        nullable = false
+        nullable = true
     )
     private val timestamp: Timestamp? = null
 

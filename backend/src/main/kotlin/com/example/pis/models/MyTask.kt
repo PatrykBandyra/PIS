@@ -22,9 +22,6 @@ class MyTask {
     @Column(length = 1)
     var type = ""
 
-    @Column
-    var frequency: Int = 0
-
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "MY_USER_ID")

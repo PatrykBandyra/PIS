@@ -31,7 +31,6 @@ class TaskController(private val taskService: TaskService, private val userServi
             myTask.url = body.url
             myTask.query = body.query
             myTask.type = body.type
-            myTask.frequency = body.frequency
             myTask.user = this.userService.getById(cookieBody.issuer.toInt())
 
             this.taskService.save(myTask)
