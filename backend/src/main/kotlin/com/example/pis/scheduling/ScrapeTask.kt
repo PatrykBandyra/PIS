@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import java.io.IOException
+import java.util.*
 import javax.transaction.Transactional
 
 @Component
@@ -53,7 +54,7 @@ class ScrapeTask(private val historyService: HistoryService, private val userSer
 
     }
 
-    @Scheduled(cron = "30 36 15 * * ?", zone = "Europe/Warsaw")  // s min h d m
+    @Scheduled(cron = "20 15 22 * * ?", zone = "Europe/Warsaw")  // s min h d m
     @Transactional
     fun scrape() {
 
@@ -67,6 +68,7 @@ class ScrapeTask(private val historyService: HistoryService, private val userSer
                         val history = MyHistory()
                         history.content = scrapedText
                         history.task = task
+                        history.localDate = Calendar.getInstance().time
                         this.historyService.save(history)
                     } catch (e: Exception) {
                         log.error("Could not execute statement. Content size too big.")
@@ -79,6 +81,7 @@ class ScrapeTask(private val historyService: HistoryService, private val userSer
                         val history = MyHistory()
                         history.content = scrapedHtml
                         history.task = task
+                        history.localDate = Calendar.getInstance().time
                         this.historyService.save(history)
                     } catch (e: Exception) {
                         log.error("Could not execute statement. Content size too big.")

@@ -3,6 +3,10 @@ package com.example.pis.models
 import org.hibernate.annotations.CreationTimestamp
 import java.sql.Timestamp
 import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+import java.util.*
 import javax.persistence.*
 
 
@@ -17,12 +21,8 @@ class MyHistory {
     @Column(length = 4000)
     var content = ""
 
-    @Column(
-        updatable = false,
-        columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP",
-        nullable = true
-    )
-    private val timestamp: Timestamp? = null
+    @Column
+    var localDate: Date? = null
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "MY_TASK_ID")
