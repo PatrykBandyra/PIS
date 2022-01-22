@@ -1,37 +1,28 @@
-import React, {Component} from 'react';
 import {Container} from 'reactstrap';
+import Logout from "./Logout";
 import {Navbar, Nav} from 'react-bootstrap';
 
-type State = {
-    isOpen: boolean;
-}
+const AppNavbar = (props: {isLoggedIn: boolean}) => {
+    const isLoggedIn = props.isLoggedIn;
 
-export default class AppNavbar extends Component<{}, State> {
-    constructor(props: {}) {
-        super(props);
-        this.state = {isOpen: false};
-        this.toggle = this.toggle.bind(this);
-    }
-
-    toggle() {
-        this.setState({
-            isOpen: !this.state.isOpen
-        });
-    }
-
-    render() {
-        return <Navbar bg="dark" expand="lg">
-            <Container>
-                <Navbar.Brand href="/">Scrape it!</Navbar.Brand>
-                <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                <Navbar.Collapse id="basic-navbar-nav">
+    return (
+        <Navbar bg="dark" expand="lg">
+        <Container>
+            <Navbar.Brand href="/">Scrape it!</Navbar.Brand>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse id="basic-navbar-nav">
+            {isLoggedIn === true &&
                 <Nav className="me-auto">
                     <Nav.Link href="/">Home</Nav.Link>
                     <Nav.Link href="/scrapeit/text">Text</Nav.Link>
                     <Nav.Link href="/scrapeit/header">Header</Nav.Link>
+                    <Logout />
                 </Nav>
-                </Navbar.Collapse>
-            </Container>
-            </Navbar>
-    }
+            }
+            </Navbar.Collapse>
+        </Container>
+        </Navbar>
+    )
 }
+
+export default AppNavbar;
