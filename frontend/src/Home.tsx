@@ -3,7 +3,6 @@ import './style/App.css';
 import AppNavbar from './AppNavbar';
 import { Container } from 'reactstrap';
 import { useHistory } from "react-router-dom";
-import {toast} from "react-toastify";
 
 const Home = () => {
     let history = useHistory();

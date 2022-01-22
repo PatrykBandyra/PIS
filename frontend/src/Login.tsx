@@ -7,8 +7,8 @@ import {toast} from "react-toastify";
 const Login = () => {
     let history = useHistory();
 
-    const [email, setEmail] = useState("test@test.com");
-    const [password, setPassword] = useState("testpass");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
     const handleSubmit = async (event: React.SyntheticEvent) => {
         event.preventDefault();

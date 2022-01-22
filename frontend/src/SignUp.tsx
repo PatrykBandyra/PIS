@@ -5,10 +5,10 @@ import {useHistory} from "react-router-dom";
 import {toast} from "react-toastify";
 
 const SignUp = () => {
-    const [name, setName] = useState("John");
-    const [email, setEmail] = useState("test@test.com");
-    const [password, setPassword] = useState("testpass");
-    const [confirmPassword, setConfirmPassword] = useState("testpass");
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [confirmPasswordError, setConfirmPasswordError] = useState("");
     const [signUpError, setSignUpError] = useState("");
 
