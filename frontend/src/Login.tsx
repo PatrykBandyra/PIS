@@ -25,9 +25,7 @@ const Login = () => {
                     toast.success("Successfully logged in!", {
                         toastId: "logIn"
                     });
-                    history.push('/home', {
-                        loggedIn: true
-                    });
+                    history.push('/');
                 }
             })
             .catch(() => {

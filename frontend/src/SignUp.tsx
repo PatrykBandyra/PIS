@@ -32,7 +32,7 @@ const SignUp = () => {
                 }
             })
             .then((response) => {
-                if(!response.ok) throw Error(response.status)
+                if(!response.ok) throw new Error(response.status.toString())
             })
             .then(() => {
                 toast.success("Successfully signed up!", {
@@ -41,7 +41,7 @@ const SignUp = () => {
                 history.push('/login');
             })
             .catch((err) => {
-                if(err.message === 409) {
+                if(err.message === "409") {
                     toast.error("Account with such email already exists!", {
                         toastId: "signUpError"
                     });

@@ -11,14 +11,14 @@ const Logout = () => {
         await fetch('/api/logout', {
                 method: 'POST'
         })
-        .then(response => {
-            if(!response.ok) throw new Error(response.status);
+        .then((response) => {
+            if(!response.ok) throw new Error(response.status.toString());
             toast.success("Successfully logged out!", {
                 toastId: "logOut"
             });
             history.push('/login');
         })
-        .catch(err => {
+        .catch((err) => {
             toast.error("Unhandled error: " + err.message, {
                 toastId: "unhandled"
             });
@@ -33,13 +33,6 @@ const Logout = () => {
                 <Form onSubmit={handleSubmit} className="d-flex flex-column">
                     <FormGroup>
                         <Button color="primary" type="submit" onClick={handleSubmit}>Log out</Button>
-                        {/*<Button*/}
-                        {/*    color="secondary"*/}
-                        {/*    type="submit"*/}
-                        {/*    name="register"*/}
-                        {/*    onClick={() => routeRedirect("register")}>*/}
-                        {/*    Register*/}
-                        {/*</Button>*/}
                     </FormGroup>
                 </Form>
             </Container>
