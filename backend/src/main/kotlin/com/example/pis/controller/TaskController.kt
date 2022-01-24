@@ -64,7 +64,7 @@ class TaskController(private val taskService: TaskService, private val userServi
      *  Returns user task object with specific id with and its whole history of changes
      */
     @GetMapping("get-user-task")
-    fun getUserTask(@RequestParam taskId: Int, @CookieValue("jwt") jwt: String?): ResponseEntity<Any> {
+    fun getUserTask(@RequestParam("id") taskId: Int, @CookieValue("jwt") jwt: String?): ResponseEntity<Any> {
         try {
             if (jwt == null) {
                 return ResponseEntity.status(401).body(Message("unauthenticated"))
