@@ -11,6 +11,9 @@ const Scrape = () => {
 
     const handleSubmit = async (event: React.SyntheticEvent) => {
         event.preventDefault();
+        const fullUrl = '/scrape/' + encodeURIComponent(endpoint) + '' +
+            '?url=' + encodeURIComponent(url) +
+            "&query=" + encodeURIComponent(query);
         if(endpoint === "") {
             toast.warn("You need to choose what kind of data you want to receive", {
                 toastId: "signedUp"
@@ -18,7 +21,7 @@ const Scrape = () => {
         }
         else {
             await toast.promise(
-                fetch('/scrape/' + endpoint + '?url=' + url + "&query=" + query, {
+                fetch(fullUrl, {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json',

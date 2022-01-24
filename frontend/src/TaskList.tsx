@@ -56,7 +56,7 @@ const TaskList = () => {
                 </div>
                 <div id="showTask" className='col min-vh-100 scraper'>
                     {show &&
-                        <Task toShow={show}/>
+                        <Task show={show}/>
                     }
                 </div>
             </Container>

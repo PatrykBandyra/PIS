@@ -3,12 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { Button, Container } from 'reactstrap';
 import {toast} from "react-toastify";
 
-const Task = ({toShow = undefined}: {toShow?: number}) => {
+const Task = ({show = undefined}: {show?: number}) => {
     const [task, setTask] = useState({});
-    const [show, setShow] = useState(-1);
-    console.log(show);
+    const [lastSeen, setLastSeen] = useState(-1);
     const loadTask = async () => {
-        fetch('/api/task/get-user-task?id=' + toShow, {
+        const fullUrl = '/api/task/get-user-task?id=' + encodeURIComponent(show);
+        fetch(fullUrl, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -24,7 +24,7 @@ const Task = ({toShow = undefined}: {toShow?: number}) => {
         .then((data) => {
             console.log(data)
             setTask(data);
-            setShow(toShow);
+            setLastSeen(show);
         })
         .catch(() => {
             toast.error("Unable to load task!", {
@@ -34,10 +34,10 @@ const Task = ({toShow = undefined}: {toShow?: number}) => {
     }
 
     useEffect(() => {
-        if(show !== toShow) {
+        if(lastSeen !== show) {
             loadTask();
         }
-    }, [show, toShow, loadTask]);
+    }, [lastSeen, show, loadTask]);
 
     return (
         <div className='d-flex container-fluid scraper'>
