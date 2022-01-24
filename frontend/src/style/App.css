@@ -36,3 +36,12 @@
     transform: rotate(360deg);
   }
 }
+
+.scraper {
+  height: 100%;
+}
+
+#result {
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}

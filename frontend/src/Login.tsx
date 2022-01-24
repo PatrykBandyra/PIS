@@ -41,8 +41,8 @@ const Login = () => {
 
     return (
         <div className="d-flex flex-column">
-            <AppNavbar isLoggedIn={false}/>
-            <Container className="d-flex justify-content-center">
+            <AppNavbar />
+            <Container className="d-flex justify-content-center mt-5">
                 <Form onSubmit={handleSubmit} className="d-flex flex-column">
                     <FormGroup>
                         <Label for="email">Email address</Label>

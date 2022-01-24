@@ -3,9 +3,13 @@ import './style/App.css';
 import AppNavbar from './AppNavbar';
 import { Container } from 'reactstrap';
 import {useHistory} from "react-router-dom";
+import {useState} from "react";
+import Scrape from "./Scrape";
 
 const Home = () => {
     const history = useHistory()
+
+    const [action, setAction] = useState('scraper');
 
     const authenticateUser = () => {
         fetch('api/user', {
@@ -20,10 +24,12 @@ const Home = () => {
 
     return (
         <div>
-            <AppNavbar isLoggedIn={true}/>
+            <AppNavbar setAction={setAction} isLoggedIn={true}/>
             <Container fluid>
                 <div className="App">
-                    <h1>Test</h1>
+                    {action === 'scraper' &&
+                        <Scrape/>
+                    }
                 </div>
             </Container>
         </div>

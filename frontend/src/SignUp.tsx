@@ -61,8 +61,8 @@ const SignUp = () => {
 
     return (
         <div className="d-flex flex-column">
-            <AppNavbar isLoggedIn={false}/>
-            <Container className="d-flex justify-content-center">
+            <AppNavbar />
+            <Container className="d-flex justify-content-center mt-5">
                 <Form method="GET" onSubmit={handleSubmit} className="d-flex flex-column">
                     <FormGroup className="form-group text-left">
                         <Label>Name</Label>
