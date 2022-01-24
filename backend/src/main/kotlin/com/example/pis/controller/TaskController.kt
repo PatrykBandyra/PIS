@@ -2,7 +2,6 @@ package com.example.pis.controller
 
 import com.example.pis.dtos.CreateTaskDTO
 import com.example.pis.dtos.Message
-import com.example.pis.dtos.ObjectIdDTO
 import com.example.pis.models.MyTask
 import com.example.pis.models.MyUser
 import com.example.pis.services.TaskService
@@ -65,7 +64,7 @@ class TaskController(private val taskService: TaskService, private val userServi
      *  Returns user task object with specific id with and its whole history of changes
      */
     @GetMapping("get-user-task")
-    fun getUserTask(@RequestBody body: ObjectIdDTO, @CookieValue("jwt") jwt: String?): ResponseEntity<Any> {
+    fun getUserTask(@RequestParam taskId: Int, @CookieValue("jwt") jwt: String?): ResponseEntity<Any> {
         try {
             if (jwt == null) {
                 return ResponseEntity.status(401).body(Message("unauthenticated"))
@@ -78,14 +77,14 @@ class TaskController(private val taskService: TaskService, private val userServi
             // Check if task with given id exists in user tasks
             var isUserTask = false
             user.tasks.forEach { task ->
-                if (task.id == body.id) {
+                if (task.id == taskId) {
                     isUserTask = true
                     return@forEach
                 }
             }
 
             if (isUserTask) {
-                return ResponseEntity.ok(taskService.findById(body.id))
+                return ResponseEntity.ok(taskService.findById(taskId))
             }
 
             return ResponseEntity.ok(Message("Task with given id doesn't belong to a user!"))
