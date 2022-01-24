@@ -19,7 +19,7 @@ pipeline {
             steps {
                 dir('backend') {
                     echo "Starting clean install"
-                    sh './mvnw clean install'
+                    sh './mvnw clean install -DskipTests=true'
                     echo "Done clean install"
                     sh "./mvnw package -DskipTests=true"
                     echo "Done packaging BE"
