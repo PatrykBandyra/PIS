@@ -18,9 +18,11 @@ pipeline {
         stage('Backend') {
             steps {
                 dir('backend') {
-                    echo "Starting clean install"
+                    echo "Starting Installation of BE"
                     sh './mvnw clean install -DskipTests=true'
-                    echo "Done clean install"
+                    echo "Done installing, now starting"
+                    sh './mvnw spring-boot:run -DskipTests=true &'
+                    echo "Backend has been started"
                     sh "./mvnw package -DskipTests=true"
                     echo "Done packaging BE"
                 }
@@ -33,7 +35,7 @@ pipeline {
                     echo "Starting yarn install"
                     sh 'yarn install'
                     echo "Done installing"
-                    sh 'yarn start'
+                    sh 'yarn start &'
                     echo "FE started"
                     sh 'yarn pack --filename fe_package'
                     echo "Done packaging FE"
