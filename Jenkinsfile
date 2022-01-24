@@ -19,12 +19,24 @@ pipeline {
             steps {
                 dir('backend') {
                     echo "Starting Installation of BE"
+                    updateGitlabCommitStatus name: 'Build BE', state: 'pending'
                     sh './mvnw clean install -DskipTests=true'
-                    echo "Done installing, now starting"
+                    updateGitlabCommitStatus name: 'Build BE', state: 'success'
+
+                    updateGitlabCommitStatus name: 'Test BE', state: 'pending'
+                    echo "Testin BE"    // ADD TEST STEP sh './mvnw test'
+                    updateGitlabCommitStatus name: 'Test BE', state: 'success'
+
+                    updateGitlabCommitStatus name: 'Start and Pack BE', state: 'pending'
+                    echo "Done installing and testing, now starting"
                     sh './mvnw spring-boot:run -DskipTests=true &'
-                    echo "Backend has been started"
+
+                    echo "Backend has been started!"
+
                     sh "./mvnw package -DskipTests=true"
                     echo "Done packaging BE"
+
+                    updateGitlabCommitStatus name: 'Start and Pack BE', state: 'success'
                 }
             }
         }
@@ -32,23 +44,29 @@ pipeline {
         stage('Frontend') {
             steps {
                 dir('frontend') {
-                    echo "Starting yarn install"
+                    echo "Starting Installation of FE"
+                    updateGitlabCommitStatus name: 'Install FE', state: 'pending'
                     sh 'yarn install'
                     echo "Done installing"
+                    updateGitlabCommitStatus name: 'Install FE', state: 'success'
+
+                    updateGitlabCommitStatus name: 'Start and Pack FE', state: 'pending'
                     sh 'yarn start &'
                     echo "FE started"
                     sh 'yarn pack --filename fe_package'
                     echo "Done packaging FE"
+
+                    updateGitlabCommitStatus name: 'Start and Pack FE', state: 'success'
                 }
             }
         }
 
-        stage("Publish BE to Nexus Repository Manager") {
+        stage("Publish packages to Nexus Repository Manager") {
             steps {
+                echo "Uploading BE and FE packages"
                 script {
                     pom = readMavenPom file: "backend/pom.xml";
                     filesByGlob = findFiles(glob: "backend/target/*.${pom.packaging}");
-                    echo "${filesByGlob[0].name} ${filesByGlob[0].path} ${filesByGlob[0].directory} ${filesByGlob[0].length} ${filesByGlob[0].lastModified}"
                     artifactPath = filesByGlob[0].path;
                     artifactExists = fileExists artifactPath;
                     if(artifactExists) {
@@ -57,8 +75,8 @@ pipeline {
                             nexusVersion: NEXUS_VERSION,
                             protocol: NEXUS_PROTOCOL,
                             nexusUrl: NEXUS_URL,
-                            groupId: pom.groupId,
-                            version: pom.version,
+                            groupId: 'PIS - Project',
+                            version: 'MAIN - deploy',
                             repository: NEXUS_REPOSITORY,
                             credentialsId: NEXUS_CREDENTIAL_ID,
                             artifacts: [
@@ -66,6 +84,9 @@ pipeline {
                                 classifier: '',
                                 file: artifactPath,
                                 type: pom.packaging]
+                                [artifactId: pom.artifactId,
+                                classifier: '',
+                                file: frontend/fe_package]
                             ]
                         );
                     } else {
