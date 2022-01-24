@@ -3,8 +3,9 @@ import './style/App.css';
 import AppNavbar from './AppNavbar';
 import { Container } from 'reactstrap';
 import {useHistory} from "react-router-dom";
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import Scrape from "./Scrape";
+import TaskList from "./TaskList";
 
 const Home = () => {
     const history = useHistory()
@@ -16,19 +17,28 @@ const Home = () => {
             method: 'GET'
         })
             .then(response => {
+                console.log('checked')
                 if(!response.ok) history.push("/login");
             })
     }
 
-    authenticateUser();
+    useEffect(() => {
+        const interval = setInterval(() => {
+            authenticateUser();
+        }, 5000);
+    })
 
     return (
         <div>
             <AppNavbar setAction={setAction} isLoggedIn={true}/>
-            <Container fluid>
-                <div className="App">
+            <Container fluid className='p-0'>
+                <div className='w-auto p-4 bg-dark'></div>
+                <div className="w-auto p-0">
                     {action === 'scraper' &&
                         <Scrape/>
+                    }
+                    {action === 'tasks' &&
+                        <TaskList/>
                     }
                 </div>
             </Container>

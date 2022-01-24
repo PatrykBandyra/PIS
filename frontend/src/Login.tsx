@@ -1,3 +1,4 @@
+// @ts-ignore
 import React, {useState} from 'react';
 import { Button, Container, Form, FormGroup, Label, Input } from 'reactstrap';
 import AppNavbar from './AppNavbar';
