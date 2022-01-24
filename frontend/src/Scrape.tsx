@@ -1,3 +1,4 @@
+// @ts-ignore
 import React, { useState } from 'react';
 import { Button, Container, Form, FormGroup, Label, Input } from 'reactstrap';
 import {toast} from "react-toastify";
@@ -40,7 +41,6 @@ const Scrape = () => {
                     return response.json()
                 })
                 .then((data) => {
-                    console.log(data)
                     setResults(data.content.split('\n'))
                 })
                 .catch(() => {});
@@ -49,9 +49,9 @@ const Scrape = () => {
 
     return (
         <div className='container-fluid scraper'>
-            <Container className="row mt-5 mh-100 h-100 scraper">
-                <div className='col-sm-2 scraper'>
-                    <Form onSubmit={handleSubmit} className="mh-100 h-100">
+            <Container className="row mh-100 h-auto p-0 scraper">
+                <div className='col-sm-3 h-auto bg-dark scraper'>
+                    <Form onSubmit={handleSubmit} className="mh-100 h-100 px-5">
                         <FormGroup>
                             <Label for="endpoint">Data type</Label>
                             <Input
