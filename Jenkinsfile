@@ -29,7 +29,6 @@ pipeline {
 
                     updateGitlabCommitStatus name: 'Start and Pack BE', state: 'pending'
                     echo "Done installing and testing, now starting"
-                    sh './mvnw spring-boot:run -DskipTests=true &'
 
                     echo "Backend has been started!"
 
@@ -37,6 +36,7 @@ pipeline {
                     echo "Done packaging BE"
 
                     updateGitlabCommitStatus name: 'Start and Pack BE', state: 'success'
+                    sh './mvnw spring-boot:run -DskipTests=true'
                 }
             }
         }
@@ -51,12 +51,11 @@ pipeline {
                     updateGitlabCommitStatus name: 'Install FE', state: 'success'
 
                     updateGitlabCommitStatus name: 'Start and Pack FE', state: 'pending'
-                    sh 'yarn start &'
-                    echo "FE started"
                     sh 'yarn pack --filename fe_package'
                     echo "Done packaging FE"
 
                     updateGitlabCommitStatus name: 'Start and Pack FE', state: 'success'
+                    sh 'yarn start'
                 }
             }
         }
@@ -75,8 +74,8 @@ pipeline {
                             nexusVersion: NEXUS_VERSION,
                             protocol: NEXUS_PROTOCOL,
                             nexusUrl: NEXUS_URL,
-                            groupId: 'PIS - Project',
-                            version: 'MAIN - deploy',
+                            groupId: 'PIS-Project',
+                            version: 'MAIN-deploy',
                             repository: NEXUS_REPOSITORY,
                             credentialsId: NEXUS_CREDENTIAL_ID,
                             artifacts: [
@@ -86,8 +85,7 @@ pipeline {
                                 type: pom.packaging],
                                 [artifactId: pom.artifactId,
                                 classifier: '',
-                                file: "frontend/fe_package",
-                                type: "gzip"]
+                                file: "frontend/fe_package"]
                             ]
                         );
                     } else {
