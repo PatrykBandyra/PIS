@@ -1,37 +1,23 @@
-import React, {Component} from 'react';
-import {Container} from 'reactstrap';
-import {Navbar, Nav} from 'react-bootstrap';
+import {Container, Navbar, Nav, NavLink, NavbarBrand} from 'reactstrap';
+import Logout from "./Logout";
+import React from 'react';
 
-type State = {
-    isOpen: boolean;
-}
-
-export default class AppNavbar extends Component<{}, State> {
-    constructor(props: {}) {
-        super(props);
-        this.state = {isOpen: false};
-        this.toggle = this.toggle.bind(this);
-    }
-
-    toggle() {
-        this.setState({
-            isOpen: !this.state.isOpen
-        });
-    }
-
-    render() {
-        return <Navbar bg="dark" expand="lg">
-            <Container>
-                <Navbar.Brand href="/">Scrape it!</Navbar.Brand>
-                <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                <Navbar.Collapse id="basic-navbar-nav">
+const AppNavbar = ({setAction = undefined, isLoggedIn = false}: {setAction?: React.Dispatch<React.SetStateAction<string>>; isLoggedIn?: boolean}) => {
+    // const isLoggedIn = props.isLoggedIn;
+    // const setAction = props.setAction;
+    return (
+        <Navbar bg="dark" expand="lg">
+        <Container>
+            <NavbarBrand className='text-light fw-bold' href="/">Scrape it!</NavbarBrand>
+            {isLoggedIn && setAction !== undefined &&
                 <Nav className="me-auto">
-                    <Nav.Link href="/">Home</Nav.Link>
-                    <Nav.Link href="/scrapeit/text">Text</Nav.Link>
-                    <Nav.Link href="/scrapeit/header">Header</Nav.Link>
+                    <NavLink className='btn btn-outline-dark text-light fw-bold' href="#" onClick={() => setAction('scraper')}>Scraper</NavLink>
+                    <Logout />
                 </Nav>
-                </Navbar.Collapse>
-            </Container>
-            </Navbar>
-    }
+            }
+        </Container>
+        </Navbar>
+    )
 }
+
+export default AppNavbar;

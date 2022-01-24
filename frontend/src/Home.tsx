@@ -1,28 +1,38 @@
-import React, { Component } from 'react';
 import './style/App.css';
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import AppNavbar from './AppNavbar';
 import { Container } from 'reactstrap';
+import {useHistory} from "react-router-dom";
+import {useState} from "react";
+import Scrape from "./Scrape";
 
-class Home extends Component {
-    render() {
-        return (
-            <div>
-                <AppNavbar/>
-                <Container fluid>
-                    <div className="App">
-                        <header className="App-header">
-                            <img src={logo} className="App-logo" alt="logo" />
-                            {/* <div className="App-intro">
-                                <div key={msg}>
-                                    {msg}
-                                </div>
-                            </div> */}
-                        </header>
-                    </div>
-                </Container>
-            </div>
-        );
+const Home = () => {
+    const history = useHistory()
+
+    const [action, setAction] = useState('scraper');
+
+    const authenticateUser = () => {
+        fetch('api/user', {
+            method: 'GET'
+        })
+            .then(response => {
+                if(!response.ok) history.push("/login");
+            })
     }
+
+    authenticateUser();
+
+    return (
+        <div>
+            <AppNavbar setAction={setAction} isLoggedIn={true}/>
+            <Container fluid>
+                <div className="App">
+                    {action === 'scraper' &&
+                        <Scrape/>
+                    }
+                </div>
+            </Container>
+        </div>
+    );
 }
 export default Home;

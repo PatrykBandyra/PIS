@@ -1,25 +1,46 @@
-import React, { Component } from 'react';
 import './style/App.css';
-import Home from './Home';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import GetText from './GetText';
-import GetHeader from "./GetHeader";
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import Login from "./Login";
+import SignUp from "./SignUp";
+import Home from "./Home";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import {ThemeProvider} from "styled-components";
+import { GlobalStyles } from "./globalStyles";
+import { darkTheme } from "./Themes"
 
 // If the type is unknown at the moment use this:
 // export type FixMeLater = any
 
-class App extends Component {
-  render() {
+const App = () => {
     return (
-        <Router>
-          <Switch>
-            <Route path='/' exact={true} component={Home}/>
-            <Route path='/scrapeit/text' exact={true} component={GetText}/>
-            <Route path='/scrapeit/header' component={GetHeader}/>
-          </Switch>
-        </Router>
+        <ThemeProvider theme={darkTheme}>
+            <>
+                <GlobalStyles/>
+                    <div>
+                    <ToastContainer
+                        containerId="toast"
+                        draggable={true}
+                        draggablePercent={20}
+                        position="top-right"
+                        autoClose={5000}
+                        pauseOnHover={true}
+                        hideProgressBar={false}
+                        newestOnTop={true}
+                        theme='dark'
+                    />
+                    <Router>
+                        <Switch>
+                            <Route exact path='/'       component={Home}/>
+                            <Route exact path='/login'  component={Login}/>
+                            <Route exact path='/signup' component={SignUp}/>
+                            <Redirect to='/'/>
+                        </Switch>
+                    </Router>
+                </div>
+            </>
+        </ThemeProvider>
     )
-  }
 }
 
 export default App;
