@@ -18,28 +18,43 @@ pipeline {
         stage('Backend') {
             steps {
                 dir('backend') {
-                    echo "Starting Installation of BE"
+
+                    echo "*** Starting Installation of BE"
                     updateGitlabCommitStatus name: 'Build BE', state: 'pending'
                     script {
                         result = sh returnStatus: true ,script: "./mvnw clean install -DskipTests=true"
+                        if (result == 0) {
+                            updateGitlabCommitStatus name: 'Build BE', state: 'success'
+                            sh "./mvnw package -DskipTests=true"
+                        } else {
+                            updateGitlabCommitStatus name: 'Build BE', state: 'failure'
+                        }
                     }
-                    echo "result = ${result}"
-                    updateGitlabCommitStatus name: 'Build BE', state: 'success'
 
+                    echo "*** Running tests of BE"
                     updateGitlabCommitStatus name: 'Test BE', state: 'pending'
-                    echo "Testin BE"    // ADD TEST STEP sh './mvnw test'
-                    updateGitlabCommitStatus name: 'Test BE', state: 'success'
+                    script {
+                        result = 0
+                        // result = sh returnStatus: true ,script: "./mvnw test"
+                        if (result == 0) {
+                            updateGitlabCommitStatus name: 'Test BE', state: 'success'
+                        } else {
+                            updateGitlabCommitStatus name: 'Test BE', state: 'failure'
+                        }
+                    }
 
-                    updateGitlabCommitStatus name: 'Start and Pack BE', state: 'pending'
-                    echo "Done installing and testing, now starting"
+                    echo "*** Done installing and testing, now starting"
+                    updateGitlabCommitStatus name: 'Start BE', state: 'pending'
+                    script {
+                        result = sh returnStatus: true ,script: "./mvnw spring-boot:run -DskipTests=true"
+                        if (result == 0) {
+                            updateGitlabCommitStatus name: 'Start BE', state: 'success'
+                        } else {
+                            updateGitlabCommitStatus name: 'Start BE', state: 'failure'
+                        }
+                    }
 
-                    echo "Backend has been started!"
-
-                    sh "./mvnw package -DskipTests=true"
-                    echo "Done packaging BE"
-
-                    updateGitlabCommitStatus name: 'Start and Pack BE', state: 'success'
-                    sh './mvnw spring-boot:run -DskipTests=true'
+                    echo "*** Backend has been started!"
                 }
             }
         }
@@ -47,18 +62,28 @@ pipeline {
         stage('Frontend') {
             steps {
                 dir('frontend') {
-                    echo "Starting Installation of FE"
-                    updateGitlabCommitStatus name: 'Install FE', state: 'pending'
-                    sh 'yarn install'
-                    echo "Done installing"
-                    updateGitlabCommitStatus name: 'Install FE', state: 'success'
+                    echo "*** Starting Installation of FE"
+                    updateGitlabCommitStatus name: 'Build FE', state: 'pending'
+                    script {
+                        result = sh returnStatus: true ,script: "yarn install"
+                        if (result == 0) {
+                            updateGitlabCommitStatus name: 'Build FE', state: 'success'
+                            sh "yarn pack --filename fe_package"
+                        } else {
+                            updateGitlabCommitStatus name: 'Build FE', state: 'failure'
+                        }
+                    }
 
-                    updateGitlabCommitStatus name: 'Start and Pack FE', state: 'pending'
-                    sh 'yarn pack --filename fe_package'
-                    echo "Done packaging FE"
-
-                    updateGitlabCommitStatus name: 'Start and Pack FE', state: 'success'
-                    sh 'yarn start'
+                    echo "*** Start FE"
+                    updateGitlabCommitStatus name: 'Start FE', state: 'pending'
+                    script {
+                        result = sh returnStatus: true ,script: "yarn start"
+                        if (result == 0) {
+                            updateGitlabCommitStatus name: 'Start FE', state: 'success'
+                        } else {
+                            updateGitlabCommitStatus name: 'Start FE', state: 'failure'
+                        }
+                    }
                 }
             }
         }
