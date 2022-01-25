@@ -46,7 +46,7 @@ pipeline {
                     echo "*** Done installing and testing, now starting"
                     updateGitlabCommitStatus name: 'Start BE', state: 'pending'
                     script {
-                        result = sh returnStatus: true ,script: "./mvnw spring-boot:run -DskipTests=true"
+                        result = sh returnStatus: true ,script: "./mvnw spring-boot:run -DskipTests=true &"
                         if (result == 0) {
                             updateGitlabCommitStatus name: 'Start BE', state: 'success'
                         } else {
@@ -77,7 +77,7 @@ pipeline {
                     echo "*** Start FE"
                     updateGitlabCommitStatus name: 'Start FE', state: 'pending'
                     script {
-                        result = sh returnStatus: true ,script: "yarn start"
+                        result = sh returnStatus: true ,script: "yarn start &"
                         if (result == 0) {
                             updateGitlabCommitStatus name: 'Start FE', state: 'success'
                         } else {
