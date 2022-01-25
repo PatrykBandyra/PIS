@@ -23,7 +23,7 @@ pipeline {
                     script {
                         result = sh returnStatus: true ,script: "./mvnw clean install -DskipTests=true"
                     }
-                    echo result
+                    echo "result = ${result}"
                     updateGitlabCommitStatus name: 'Build BE', state: 'success'
 
                     updateGitlabCommitStatus name: 'Test BE', state: 'pending'
