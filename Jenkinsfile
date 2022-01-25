@@ -22,24 +22,26 @@ pipeline {
                     echo "*** Starting Installation of BE"
                     updateGitlabCommitStatus name: 'Build BE', state: 'pending'
                     script {
+                        updateGitlabCommitStatus name: 'Build BE', state: 'running'
                         result = sh returnStatus: true ,script: "./mvnw clean install -DskipTests=true"
                         if (result == 0) {
                             updateGitlabCommitStatus name: 'Build BE', state: 'success'
                             sh "./mvnw package -DskipTests=true"
                         } else {
-                            updateGitlabCommitStatus name: 'Build BE', state: 'failure'
+                            updateGitlabCommitStatus name: 'Build BE', state: 'failed'
                         }
                     }
 
                     echo "*** Running tests of BE"
                     updateGitlabCommitStatus name: 'Test BE', state: 'pending'
                     script {
+                        updateGitlabCommitStatus name: 'Test BE', state: 'running'
                         result = 1
                         // result = sh returnStatus: true ,script: "./mvnw test"
                         if (result == 0) {
                             updateGitlabCommitStatus name: 'Test BE', state: 'success'
                         } else {
-                            updateGitlabCommitStatus name: 'Test BE', state: 'failure'
+                            updateGitlabCommitStatus name: 'Test BE', state: 'failed'
                         }
                     }
 
@@ -50,7 +52,7 @@ pipeline {
                         if (result == 0) {
                             updateGitlabCommitStatus name: 'Start BE', state: 'success'
                         } else {
-                            updateGitlabCommitStatus name: 'Start BE', state: 'failure'
+                            updateGitlabCommitStatus name: 'Start BE', state: 'failed'
                         }
                     }
 
@@ -65,12 +67,13 @@ pipeline {
                     echo "*** Starting Installation of FE"
                     updateGitlabCommitStatus name: 'Build FE', state: 'pending'
                     script {
+                        updateGitlabCommitStatus name: 'Build FE', state: 'running'
                         result = sh returnStatus: true ,script: "yarn install"
                         if (result == 0) {
                             updateGitlabCommitStatus name: 'Build FE', state: 'success'
                             sh "yarn pack --filename fe_package"
                         } else {
-                            updateGitlabCommitStatus name: 'Build FE', state: 'failure'
+                            updateGitlabCommitStatus name: 'Build FE', state: 'failed'
                         }
                     }
 
@@ -81,7 +84,7 @@ pipeline {
                         if (result == 0) {
                             updateGitlabCommitStatus name: 'Start FE', state: 'success'
                         } else {
-                            updateGitlabCommitStatus name: 'Start FE', state: 'failure'
+                            updateGitlabCommitStatus name: 'Start FE', state: 'failed'
                         }
                     }
                 }
