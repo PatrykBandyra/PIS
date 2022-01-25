@@ -116,7 +116,7 @@ pipeline {
                                 type: pom.packaging],
                                 [artifactId: pom.artifactId,
                                 classifier: 'FE',
-                                file: "frontend/fe_pack",
+                                file: "frontend/fe_pack.tgz",
                                 type: "tgz"]
                             ]
                         );
