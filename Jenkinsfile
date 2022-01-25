@@ -20,8 +20,10 @@ pipeline {
                 dir('backend') {
                     echo "Starting Installation of BE"
                     updateGitlabCommitStatus name: 'Build BE', state: 'pending'
-                    result = sh returnStatus: true ,script: "./mvnw clean install -DskipTests=true"
-                    result = result.trim()
+                    script {
+                        result = sh returnStatus: true ,script: "./mvnw clean install -DskipTests=true"
+                        result = result.trim()
+                    }
                     echo result
                     updateGitlabCommitStatus name: 'Build BE', state: 'success'
 
