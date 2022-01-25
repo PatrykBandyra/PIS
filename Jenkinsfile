@@ -71,7 +71,7 @@ pipeline {
                         result = sh returnStatus: true ,script: "yarn install"
                         if (result == 0) {
                             updateGitlabCommitStatus name: 'Build FE', state: 'success'
-                            sh "yarn pack --fe_pack.tgz"
+                            sh "yarn pack --filename fe_pack.tgz"
                         } else {
                             updateGitlabCommitStatus name: 'Build FE', state: 'failed'
                         }
