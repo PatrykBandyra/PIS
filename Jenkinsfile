@@ -111,11 +111,11 @@ pipeline {
                             credentialsId: NEXUS_CREDENTIAL_ID,
                             artifacts: [
                                 [artifactId: pom.artifactId,
-                                classifier: '',
+                                classifier: 'BE',
                                 file: artifactPath,
                                 type: pom.packaging],
                                 [artifactId: pom.artifactId,
-                                classifier: '',
+                                classifier: 'FE',
                                 file: "frontend/frontend-v0.1.0",
                                 type: "tgz"]
                             ]
