@@ -34,7 +34,7 @@ pipeline {
                     echo "*** Running tests of BE"
                     updateGitlabCommitStatus name: 'Test BE', state: 'pending'
                     script {
-                        result = 0
+                        result = 1
                         // result = sh returnStatus: true ,script: "./mvnw test"
                         if (result == 0) {
                             updateGitlabCommitStatus name: 'Test BE', state: 'success'
@@ -113,7 +113,8 @@ pipeline {
                                 type: pom.packaging],
                                 [artifactId: pom.artifactId,
                                 classifier: '',
-                                file: "frontend/fe_package"]
+                                file: "frontend/fe_package",
+                                type: "gzip"]
                             ]
                         );
                     } else {
