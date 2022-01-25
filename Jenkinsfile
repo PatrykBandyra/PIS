@@ -71,7 +71,7 @@ pipeline {
                         result = sh returnStatus: true ,script: "yarn install"
                         if (result == 0) {
                             updateGitlabCommitStatus name: 'Build FE', state: 'success'
-                            sh "yarn pack"
+                            sh "yarn pack --fe_pack.tgz"
                         } else {
                             updateGitlabCommitStatus name: 'Build FE', state: 'failed'
                         }
@@ -116,7 +116,7 @@ pipeline {
                                 type: pom.packaging],
                                 [artifactId: pom.artifactId,
                                 classifier: 'FE',
-                                file: "frontend/frontend-v0.1.0",
+                                file: "frontend/fe_pack",
                                 type: "tgz"]
                             ]
                         );
