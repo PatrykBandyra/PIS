@@ -43,7 +43,6 @@ const Task = ({show = undefined}: {show?: number}) => {
 
     useEffect(() => {
         if(lastSeen !== show) {
-            console.log('loadTask')
             loadTask();
         }
     }, [lastSeen, show]);
