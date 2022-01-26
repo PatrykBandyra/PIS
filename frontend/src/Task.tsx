@@ -1,10 +1,18 @@
 // @ts-ignore
 import React, { useState, useEffect } from 'react';
-import { Button, Container } from 'reactstrap';
+import { Container } from 'reactstrap';
 import {toast} from "react-toastify";
 
+export interface taskType {
+    id: number;
+    url: string;
+    query: string;
+    type: string;
+    history: [];
+}
+
 const Task = ({show = undefined}: {show?: number}) => {
-    const [task, setTask] = useState({});
+    const [task, setTask] = useState<taskType>();
     const [lastSeen, setLastSeen] = useState(-1);
     const loadTask = async () => {
         const fullUrl = '/api/task/get-user-task?id=' + encodeURIComponent(show);
@@ -35,9 +43,10 @@ const Task = ({show = undefined}: {show?: number}) => {
 
     useEffect(() => {
         if(lastSeen !== show) {
+            console.log('loadTask')
             loadTask();
         }
-    }, [lastSeen, show, loadTask]);
+    }, [lastSeen, show]);
 
     return (
         <div className='d-flex container-fluid scraper'>

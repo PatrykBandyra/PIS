@@ -23,8 +23,6 @@ const Logout = () => {
                 toastId: "unhandled"
             });
         })
-
-
     }
 
     return (

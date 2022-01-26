@@ -34,17 +34,17 @@ const TaskList = () => {
 
     useEffect(() => {
         loadTaskList();
-    }, [loadTaskList]);
+    }, []);
 
     return (
         <div className='container-fluid scraper'>
             <Container className="row mh-100 h-100 p-0 scraper">
-                <div className='col-sm-3 scraper bg-dark py-5 px-0 h-auto mh-100'>
+                <div className='col-sm-3 scraper bg-dark py-5 px-0 h-auto mh-100 w-25 inline-block'>
                     {tasks.map((task) => {
                         return (
                             <Button
                                 key={task.id}
-                                className='mb-2 w-100'
+                                className='mb-2 w-100 text-wrap'
                                 onClick={() => {
                                     console.log(task.id)
                                     setShow(task.id)

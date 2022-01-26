@@ -4,55 +4,73 @@ import { Button, Container, Form, FormGroup, Label, Input } from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import {useHistory} from "react-router-dom";
 import {toast} from "react-toastify";
+import isEmail from 'validator/lib/isEmail';
 
 const SignUp = () => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [confirmPasswordError, setConfirmPasswordError] = useState("");
-    const [signUpError, setSignUpError] = useState("");
 
     let history = useHistory();
 
     const handleSubmit = async (event: React.SyntheticEvent) => {
         event.preventDefault();
-        if(password !== confirmPassword) {
-            setConfirmPasswordError("Passwords are not identical");
-            setSignUpError("");
-            history.push('/signUp');
+        const errors = [];
+        if(name.length === 0) {
+            errors.push("Name is required.");
         }
-        else {
-            setConfirmPasswordError("");
-            await fetch('/api/register', {
-                method: 'POST',
-                body: JSON.stringify({name: name, email: email, password: password}),
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                }
-            })
-            .then((response) => {
-                if(!response.ok) throw new Error(response.status.toString())
-            })
-            .then(() => {
-                toast.success("Successfully signed up!", {
-                    toastId: "signUp"
-                });
-                history.push('/login');
-            })
-            .catch((err) => {
-                if(err.message === "409") {
-                    toast.error("Account with such email already exists!", {
-                        toastId: "signUpError"
-                    });
-                }
-                else {
-                    toast.error("Unhandled error: " + err.message, {
-                        toastId: "unhandled"
-                    });
-                }
+        if(email.length === 0) {
+            errors.push("Email is required.");
+        }
+        else if(!isEmail(email)) {
+            errors.push("Email is invalid.");
+        }
+        if(password.length === 0) {
+            errors.push("Password is required.");
+        }
+        else if(confirmPassword.length === 0) {
+            errors.push("You need to confirm your password.");
+        }
+        else if(confirmPassword !== password) {
+            errors.push("Passwords are not identical.");
+        }
+        errors.forEach((error, i) => {
+            toast.error(error, {
+                toastId: "signUpError_" + i
             });
+        })
+        if(errors.length === 0) {
+            if(password !== confirmPassword) {
+                await fetch('/api/register', {
+                    method: 'POST',
+                    body: JSON.stringify({name: name, email: email, password: password}),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                })
+                    .then((response) => {
+                        if (!response.ok) throw new Error(response.status.toString())
+                    })
+                    .then(() => {
+                        toast.success("Successfully signed up!", {
+                            toastId: "signUp"
+                        });
+                        history.push('/login');
+                    })
+                    .catch((err) => {
+                        if (err.message === "409") {
+                            toast.error("Account with such email already exists!", {
+                                toastId: "signUpError"
+                            });
+                        } else {
+                            toast.error("Unhandled error: " + err.message, {
+                                toastId: "unhandled"
+                            });
+                        }
+                    });
+            }
         }
     }
 
@@ -73,12 +91,10 @@ const SignUp = () => {
                             type="text"
                             name="name"
                             id="name"
-                            aria-describedby="nameHelp"
                             placeholder="Enter name"
                             value={name || ''}
                             onChange={(e) => setName(e.target.value)}
                             autoComplete="signUp.name"
-                            required={true}
                         />
                     </FormGroup>
                     <FormGroup className="form-group text-left">
@@ -88,12 +104,10 @@ const SignUp = () => {
                             type="email"
                             name="email"
                             id="email"
-                            aria-describedby="emailHelp"
                             placeholder="Enter email"
                             value={email || ''}
                             onChange={(e) => setEmail(e.target.value)}
                             autoComplete="signUp.email"
-                            required={true}
                         />
                     </FormGroup>
                     <FormGroup className="form-group text-left">
@@ -106,7 +120,6 @@ const SignUp = () => {
                             placeholder="Password"
                             value={password || ''}
                             onChange={(e) => setPassword(e.target.value)}
-                            required={true}
                         />
                     </FormGroup>
                     <FormGroup className="form-group text-left">
@@ -119,18 +132,7 @@ const SignUp = () => {
                             placeholder="Confirm password"
                             value={confirmPassword || ''}
                             onChange={(e) => setConfirmPassword(e.target.value)}
-                            required={true}
                         />
-                        <div>
-                            <small id="confirmPasswordError" className="text-danger form-text">
-                                {confirmPasswordError}
-                            </small>
-                        </div>
-                        <div>
-                            <small id="signUpError" className="text-danger form-text">
-                                {signUpError}
-                            </small>
-                        </div>
                     </FormGroup>
                     <FormGroup className="d-flex justify-content-around mt-2">
                         <Button color="primary" type="submit">Sign up</Button>
