@@ -12,4 +12,6 @@ class UserService(private val userRepository: UserRepository) {
     fun findByEmail(email: String): MyUser? = this.userRepository.findByEmail(email)
 
     fun getById(id: Int): MyUser = this.userRepository.getById(id)
+
+    fun getAll(): MutableList<MyUser> = this.userRepository.findAll()
 }

@@ -7,6 +7,7 @@ import com.example.pis.models.MyUser
 import com.example.pis.services.UserService
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.util.*
@@ -28,7 +29,7 @@ class AuthController(private val userService: UserService) {
             return ResponseEntity.ok(this.userService.save(myUser))
 
         } catch (e: Exception) {
-            return ResponseEntity.ok(Message("Account with such email already exists"))
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Account with such email already exists!")
         }
     }
 

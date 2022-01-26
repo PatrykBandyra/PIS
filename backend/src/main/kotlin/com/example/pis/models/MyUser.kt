@@ -27,7 +27,7 @@ class MyUser {
             field = passwordEncoder.encode(value)
         }
 
-    @OneToMany(mappedBy = "user", cascade = [(CascadeType.ALL)], fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     var tasks: MutableList<MyTask> = mutableListOf()
 
     fun comparePassword(password: String): Boolean = BCryptPasswordEncoder().matches(password, this.password)
